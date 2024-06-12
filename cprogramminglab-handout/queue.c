@@ -42,26 +42,15 @@ void q_free(queue_t *q)
   {
     return;
   }
-
-  if (q->head != NULL)
+  list_ele_t *curr = q->head;
+  while (curr != NULL)
   {
-    free_node(q->head);
+    list_ele_t *tmp = curr->next;
+    free(curr->value);
+    free(curr);
+    curr = tmp;
   }
   free(q);
-}
-
-void free_node(list_ele_t *node)
-{
-  if (node == NULL)
-  {
-    return;
-  }
-  free(node->value);
-  if (node->next != NULL)
-  {
-    free_node(node->next);
-  }
-  free(node);
 }
 
 /*
