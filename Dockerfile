@@ -12,11 +12,5 @@ RUN apt-get update && apt-get install -y \
     git \
     && apt-get clean
 
-# 设置工作目录
-WORKDIR /workspace
-
-# 复制你的项目文件到容器中
-COPY . /workspace
-
 # 设置容器启动时的默认命令
 CMD ["/bin/bash"]
