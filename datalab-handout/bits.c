@@ -143,7 +143,7 @@ NOTES:
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+  return ~(~x&~y)&~(x&y);
 }
 /* 
  * tmin - return minimum two's complement integer 
@@ -152,9 +152,8 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmin(void) {
-
-  return 2;
-
+  //Tmin = 1000 0000 0000 ... 0000 (1+31个0)
+  return 0x1<<31;
 }
 //2
 /*
@@ -165,7 +164,11 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return 2;
+  //假设x就是Tmax，反证法，那么x具备什么样的性质？ 0+31个1
+  int tmin = x+1; //0x1000 Tmax+1溢出为Tmin
+  int zero = ~(tmin + x); //0x1111 ---> 0x0000 向全0值靠拢，最后取反
+  int isNotNegativeOne = !!tmin; //需要排除 x=-1 的情况，-1(32个1) + 1 = 32个0，再 +x 也是全1 取反也满足全0 的情况
+  return !zero & isNotNegativeOne;
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -176,7 +179,14 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+  int base = 0xAA;
+  //构造0xAAAAAAAA掩码来帮助检验，题目明确指示了不能显式获取超过0xFF的数据
+  //这里的构造也很精彩，通过按位或以及移位错位的方式来组合构造高位数据
+  int mask = (base << 24) | (base << 16) | (base << 8) | base;
+  //判断奇数位很好想到，但是之后再亦或一下很精彩
+  //亦或的操作只是奇数位，偶数位因为没发生改动因此亦或结果都是0
+  int res = (x & mask) ^ x; 
+  return !res;
 }
 /* 
  * negate - return -x 
@@ -186,7 +196,7 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  return ~x + 1;
 }
 //3
 /* 
@@ -199,7 +209,12 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+  //x-0x30
+  int lower_bound = x + (~0x30 + 1);
+  //0x39-x
+  int upper_bound = 0x39 + (~x +1);
+  //x-0x30>=0 & 0x39-x>=0
+  return !(lower_bound >> 31) & !(upper_bound >> 31);
 }
 /* 
  * conditional - same as x ? y : z 
@@ -208,8 +223,15 @@ int isAsciiDigit(int x) {
  *   Max ops: 16
  *   Rating: 3
  */
+// int conditional(int x, int y, int z) {
+//   int x_is_not_zero = (x << 31 >> 31);
+//   return y + !x_is_not_zero & z + (~y + 1);
+// }
 int conditional(int x, int y, int z) {
-  return 2;
+  //x不为0则赋为1，x为0则赋为0
+  int x_is_not_zero = !!x;
+  // x!=0 -> y , x=0 -> z
+  return (y & x_is_not_zero) | (z & !x_is_not_zero);
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -219,7 +241,10 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  //y-x
+  int res = y + (~x + 1);
+  //y-x>=0
+  return !((res >>31)&1);
 }
 //4
 /* 
@@ -231,6 +256,7 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {
+
   return 2;
 }
 /* howManyBits - return the minimum number of bits required to represent x in
