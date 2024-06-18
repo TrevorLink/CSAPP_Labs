@@ -6,11 +6,16 @@
 
 但是出于自主完成实验的初衷以及提升代码能力的追求，**非常不建议直接查看完整实验代码**
 
+实验前置 Bootcamp
+
+- [ ] [Bootcamp 1: Linux, Command Line, Git](/bootcamp/bootcamp1/Lab1.md)
+- [ ] [Bootcamp 2: Debugging & GDB](/bootcamp/bootcamp2/Lab2.md)
+
 所有实验的 Hints 提示：
 
 - [x] [Lab0:CProgramming Lab 100%](/cprogramminglab-handout/Lab0.md) 全测试案例跑通 100 分
-- [x] [Lab1:Data Lab 60%](/datalab-handout/Lab1.md) 剩 Rating4 的五题暂处搁置状态，待更新
-- [ ] Lab2:Bomb Lab
+- [ ] [Lab1:Data Lab 60%](/datalab-handout/Lab1.md) 剩 Rating4 的五题暂处搁置状态，待更新
+- [ ] [Lab2:Bomb Lab](/bomblab-handout/Lab2.md)
 - [ ] Lab3:Attack Lab
 - [ ] Lab4:Cache Lab
 - [ ] Lab5:Shell Lab
